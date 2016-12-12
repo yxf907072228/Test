@@ -1,7 +1,7 @@
 var webpack = require('webpack')
 var webpackDevMiddleware = require('webpack-dev-middleware')
 var webpackHotMiddleware = require('webpack-hot-middleware')
-var config = require('./webpack.config')
+var config = require('./webpack.dev.config')
 
 var express = require('express')
 var app = express()
@@ -17,7 +17,7 @@ app.use('/mock_data', function(req, res) {
 })
 
 app.use(function(req, res) {
-    res.sendFile(__dirname + '/h5Demos/index.html')
+    res.sendFile(__dirname + '/testDemo/index.html')
 })
 
 app.listen(port, function(error) {

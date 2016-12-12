@@ -1,44 +1,63 @@
-var webpack = require('webpack');
-var path = require('path');
+var fs = require('fs')
+var fsExtra = require('fs-extra')
+var path = require('path')
+var webpack = require('webpack')
+var CleanPlugin = require('clean-webpack-plugin');
+
 
 module.exports = {
-  entry: [
+  entry: {
    
-    './h5Demos/demo',
-  ],
+    app:'./testDemo/index',
+		vendor: ['babel-polyfill','whatwg-fetch', 'react', 'react-dom', 'redux',
+			'react-redux', 'react-router', 'react-router-redux']
+  },
+
+  resolve: {
+		alias: {
+			app: path.join(__dirname, 'testDemo'),
+			libs: path.join(__dirname, 'libs')
+		}
+	},
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
     publicPath: '/static/',
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('development'),
-      }
-    }),
+    new CleanPlugin([path.resolve(__dirname, './dist/static')]),
+		// ignore dev config
+		new webpack.IgnorePlugin(/\.\/dev/, /\/config$/),
+
+		// set global vars
+		new webpack.DefinePlugin({
+			'process.env': {
+				// Useful to reduce the size of client-side libraries, e.g. react
+				NODE_ENV: JSON.stringify('production')
+			}
+		}),
+
+		// optimizations
+		new webpack.HotModuleReplacementPlugin(),
+		new webpack.optimize.DedupePlugin(),
+		new webpack.optimize.OccurenceOrderPlugin(),
+		new webpack.NoErrorsPlugin(),
+	  new webpack.optimize.CommonsChunkPlugin({
+			name: 'vendor',
+			filename: 'vendor.bundle.js',
+			minChunks: Infinity,
+		})
   ],
   module: {
     loaders: [
-      {
-        test: /(\.jsx|\.js)$/,
-        loaders: ['babel?presets[]=es2015&presets[]=react'],
-        exclude: /node_modules/,
-        include: __dirname
-      },
-      {
-        test: /\.less/,
-        loaders: ['style', 'css', 'less'],
-        include: __dirname
-      },
-      {
-        test: /\.html$/,
-        loader: 'file?name=[name].[ext]'
-      },{test: /\.(jpg|png)$/, loader: "url?limit=8192"}
-    ],
-  },
-  devtool: 'cheap-module-eval-source-map',
+			{ test: /\.css/, loader: 'style!css' },
+			{ test: /\.less$/, loader: 'style!css!less' },
+			{ test: /\.(js|jsx)$/, loaders: [ 'babel' ], exclude: /node_modules/, include: __dirname },
+			{ test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
+			{ test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream' },
+			{ test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file' },
+			{ test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml' },
+			{ test: /\.(png|jpg|gif)$/, loader: 'url?limit=10000' }
+		]
+  }
 };

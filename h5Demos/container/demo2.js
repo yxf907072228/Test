@@ -8,11 +8,18 @@ class Demo1 extends React.Component{
         //this.test2()
         //this.test3()
         this.test4()
+        
+    }
+
+    componentDidMount(){
+//this.refs.f1.contentWindow.location.href="http://192.168.2.102:3000/#/es6/demo3?_t=12312312"
     }
 
     render(){
         return (
-            <div>DEMO1</div>
+            <div>DEMO1
+            <iframe ref="f1" style={{width:'300px',height:'300px'}} src="http://192.168.2.102:3000/#/es6/demo3?_t=12312312"></iframe>
+            </div>
         )
     }
 

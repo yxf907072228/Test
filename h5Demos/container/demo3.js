@@ -8,7 +8,7 @@ class Demo3 extends React.Component{
         //this.test2()
         //this.test3()
         //this.test4()
-        this.test(5)
+        this.test5()
     }
     
     render(){
