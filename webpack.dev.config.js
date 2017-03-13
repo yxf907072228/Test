@@ -6,14 +6,14 @@ module.exports = {
   devtool: 'eval',
   entry: {
    
-    app:['webpack-hot-middleware/client','./testDemo/index'],
+    app:['webpack-hot-middleware/client','./h5Demos/demo'],
     vendor: ['babel-polyfill','whatwg-fetch', 'react', 'react-dom', 'redux',
 			'react-redux', 'react-router', 'react-router-redux']
   },
 
   resolve: {
 		alias: {
-			app: path.join(__dirname, 'testDemo'),
+			app: path.join(__dirname, 'h5Demos'),
       libs: path.join(__dirname, 'libs')
 			//libs: path.join(__dirname, 'libs')
 		}

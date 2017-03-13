@@ -2,7 +2,7 @@ module.exports = {
   path: 'es6',
   indexRoute: {
       onEnter: (nextState, replace) => {
-        replace('/es6/demo3');
+        replace('/es6/symbol');
       }
   },
   childRoutes:[
@@ -19,6 +19,14 @@ module.exports = {
      ,getComponent(nextState, cb) {
         require.ensure([], (require) => {
           cb(null, require('./demo3'))
+        })
+      }
+    }
+    ,{
+      path:'symbol'
+     ,getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('./symbol'))
         })
       }
     }
