@@ -1,7 +1,9 @@
 import React from 'react'
 import { render } from 'react-dom'
+import 'babel-polyfill';
 import { Router, browserHistory,hashHistory } from 'react-router'
 
+Promise.all([])
 const rroute= {
   childRoutes: [ {
     path: '/',

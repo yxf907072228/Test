@@ -1,4 +1,4 @@
-import $ from 'jquery'
+
 zip.workerScriptsPath = "http://gildas-lormeau.github.io/zip.js/demos/";
 /**
  * @desc 压缩文件;
@@ -14,12 +14,14 @@ export var ZipArchive = function() {
     this.onerror = noop;
     this.onprogress = noop;
     //创建一个延迟对象;
-    var def = this.defer = new $.Deferred();
-    zip.createWriter( new zip.BlobWriter("application/zip"), function(zipWriter) {
-        _this.zipWriter = zipWriter;
-        //继续执行队列;
-        def.resolve();
-    }, this.error.bind(_this) );
+    var def = this.defer = new Promise((resolve,reject)=>{
+        zip.createWriter( new zip.BlobWriter("application/zip"), function(zipWriter) {
+            _this.zipWriter = zipWriter;
+            //继续执行队列;
+            resolve();
+        }, this.error.bind(_this) );
+    });
+    
 };
 
 ZipArchive.blob = function (filename, content) {
@@ -28,7 +30,7 @@ ZipArchive.blob = function (filename, content) {
     });
 };
 
-$.extend( ZipArchive.prototype, {
+Object.assign( ZipArchive.prototype, {
     /**
      * @desc 添加文件， 实际上是串行执行压缩， 因为使用了jQ的延迟对象，
      * @param String filename为文件的名字;
@@ -44,11 +46,11 @@ $.extend( ZipArchive.prototype, {
         //为了产生链式的效果， 必须把deferrer赋值给新的defer
         this.defer = this.defer.then(function() {
             //创建延迟对象
-            var def = $.Deferred();
-            _this.zipWriter.add(filename, new zip.BlobReader(blob)
+            var def = new Promise((resolve, reject)=>{
+                _this.zipWriter.add(filename, new zip.BlobReader(blob)
                 ,function() { // reader
                     console.log("addFile success!!");
-                    def.resolve();
+                    resolve();
                     //zipWriter.close(callback);
                 }, function (size, total) { //onend
                     _this.onend(filename, blob, total);
@@ -58,6 +60,8 @@ $.extend( ZipArchive.prototype, {
                 },options || {
                     //options
                 });
+            });
+            
             //把延迟对象返回是为了实现串行执行进度的问题， 因为zip.js使用了webworker， 是异步的， 只能基于回调去执行;
             return def;
         });

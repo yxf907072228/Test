@@ -17,7 +17,7 @@ app.use('/mock_data', function(req, res) {
 })
 
 app.use(function(req, res) {
-    res.sendFile(__dirname + '/h5Demos/index.html')
+    res.sendFile(__dirname + '/testDemo/index.html')
 })
 
 app.listen(port, function(error) {

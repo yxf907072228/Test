@@ -10,7 +10,15 @@ module.exports = {
       path:'download'
      ,getComponent(nextState, cb) {
         require.ensure([], (require) => {
-          cb(null, require('./download')['default'])
+          cb(null, require('./zip')['default'])
+        })
+      }
+    },
+    {
+      path:'jszip'
+     ,getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('./jszip')['default'])
         })
       }
     }

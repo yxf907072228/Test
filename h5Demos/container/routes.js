@@ -30,5 +30,29 @@ module.exports = {
         })
       }
     }
+    ,{
+      path:'setmap'
+     ,getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('./setmap'))
+        })
+      }
+    }
+    ,{
+      path:'proxy'
+     ,getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('./proxy'))
+        })
+      }
+    }
+    ,{
+      path:'reflect'
+     ,getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('./reflect'))
+        })
+      }
+    }
   ]
 }
